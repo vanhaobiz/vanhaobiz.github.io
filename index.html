@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Hạnh Phúc | Từ Người Công Nhân Đến Kỹ Sư Cơ Điện Lạnh & Runner</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            950: '#022c22',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar & Subtle Effects */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #0ea5e9, #f59e0b);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+        .drop-cap::first-letter {
+            font-family: 'Playfair Display', serif;
+            float: left;
+            font-size: 4.2rem;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-left: 2px;
+            color: #059669;
+            font-weight: 700;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.88);
+        }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .float-badge {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300">
+
+    <!-- Thanh tiến trình đọc bài -->
+    <div id="progressBar" class="reading-progress w-0"></div>
+
+    <!-- Thanh điều hướng (Navbar) -->
+    <header class="sticky top-0 z-50 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo / Thương hiệu cá nhân -->
+            <a href="#trang-chu" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-emerald-600/25 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-person-running text-xl"></i>
+                </div>
+                <div>
+                    <span class="font-serif font-bold text-xl tracking-tight text-slate-900 dark:text-white block leading-none">
+                        Hành Trình Hạnh Phúc
+                    </span>
+                    <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium tracking-wider uppercase mt-1 block">
+                        Kỹ Sư Cơ Điện Lạnh • Marathoner #80137
+                    </span>
+                </div>
+            </a>
+
+            <!-- Menu Desktop -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#cau-chuyen" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Câu Chuyện Đời Tôi</a>
+                <a href="#cot-moc" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Chặng Đường Vượt Khó</a>
+                <a href="#goc-anh" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Khoảnh Khắc Hạnh Phúc</a>
+                <a href="#triet-ly" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Triết Lý Sống</a>
+                <a href="#luu-but" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Góc Chia Sẻ</a>
+            </nav>
+
+            <!-- Nút công cụ (Đổi ảnh thật / Darkmode / Chia sẻ) -->
+            <div class="flex items-center gap-2.5">
+                <button onclick="openPhotoSwapModal()" title="Tải ảnh trực tiếp từ máy của bạn nếu xem offline" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-all">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                    <span>Đồng bộ Ảnh Gốc</span>
+                </button>
+                <button onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-emerald-600 transition-colors">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION: Tấm ảnh dang rộng vòng tay về đích a22.JPG -->
+    <section id="trang-chu" class="relative overflow-hidden py-12 lg:py-20 bg-gradient-to-b from-emerald-950 via-slate-900 to-slate-950 text-white">
+        <!-- Họa tiết nền -->
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <!-- Cột Nội dung Hero -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs sm:text-sm font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>Hồi ký truyền cảm hứng • Vững bước giữa Sài Gòn hoa lệ</span>
+                    </div>
+
+                    <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+                        Từ Đôi Bàn Tay Thợ Lành Nghề Đến <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300">Kỹ Sư Cơ Điện Lạnh</span> & Bước Chân Không Mỏi
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+                        Một mình rời quê lên phố với hai bàn tay trắng, chắt chiu từng giọt mồ hôi nơi xưởng máy để bước vào cổng trường Đại học ở tuổi 24. Hôm nay, giữa những tòa cao ốc rực sáng của TP. Hồ Chí Minh giàu đẹp và nghĩa tình, tôi nhìn lại hành trình ấy bằng nụ cười hạnh phúc khi băng qua vạch đích cuộc đời.
+                    </p>
+
+                    <!-- Các con số biểu tượng -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 max-w-xl">
+                        <div class="bg-white/5 backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-amber-400">24 Tuổi</span>
+                            <span class="text-xs text-slate-300">Thi đỗ Đại học bằng ý chí thép</span>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-emerald-400">HVAC/MEP</span>
+                            <span class="text-xs text-slate-300">Kỹ sư kiến tạo nhịp thở đô thị</span>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm p-3.5 rounded-2xl border border-white/10">
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-sky-400">M 80137</span>
+                            <span class="text-xs text-slate-300">Tinh thần Finisher không bỏ cuộc</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="#cau-chuyen" class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg shadow-emerald-600/30 transition-all transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>Đọc trọn vẹn câu chuyện</span>
+                        </a>
+                        <a href="#goc-anh" class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-medium border border-white/15 transition-all">
+                            <i class="fa-solid fa-images text-emerald-400"></i>
+                            <span>Xem bộ ảnh Hành Trình Hạnh Phúc</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Cột Hình ảnh Đại diện Hero (a22.JPG - Dang rộng đôi tay về đích) -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/15 group">
+                        <img 
+                            data-photo-key="a22"
+                            src="a22.JPG" 
+                            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=80';"
+                            alt="Khoảnh khắc dang rộng vòng tay về đích tại VnExpress Marathon Green Paradise Cần Giờ - BIB M 80137" 
+                            class="w-full h-[420px] sm:h-[500px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
+                        <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
+                            <div>
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white mb-2 shadow">
+                                    BIB: M 80137 • CẦN GIỜ
+                                </span>
+                                <p class="text-white font-serif italic text-base sm:text-lg leading-snug">
+                                    "Dang rộng vòng tay đón nhận thành quả sau những tháng năm bền bỉ ngược gió."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Huy hiệu nổi -->
+                    <div class="float-badge hidden sm:flex absolute -top-5 -left-5 bg-white text-slate-900 p-4 rounded-2xl shadow-xl items-center gap-3 border border-emerald-100">
+                        <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-medium">Đại diện trang</p>
+                            <p class="text-sm font-bold text-slate-800">Hành Trình Hạnh Phúc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHẦN CHÍNH: CÂU CHUYỆN TRUYỀN CẢM HỨNG NHẤT MỌI THỜI ĐẠI -->
+    <main id="cau-chuyen" class="py-16 lg:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Tiêu đề bài viết -->
+        <div class="text-center space-y-4 pb-12 border-b border-slate-200 dark:border-slate-800">
+            <div class="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold text-sm uppercase tracking-widest">
+                <i class="fa-solid fa-feather-pointed"></i>
+                <span>Tự Truyện & Cảm Hứng Sống</span>
+            </div>
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
+                Bản Giao Hưởng Của Mồ Hôi, Nghị Lực Tuổi 24 Và Những Bước Chân Hạnh Phúc Giữa Lòng Thành Phố
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm sm:text-base italic">
+                Viết cho những ngày tháng không chùn bước, cho TP. Hồ Chí Minh bao dung và những người bạn đồng hành tuyệt vời.
+            </p>
+        </div>
+
+        <!-- Nội dung câu chuyện được chia làm các Chương giàu cảm xúc -->
+        <article class="mt-12 space-y-16 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+
+            <!-- CHƯƠNG 1 -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-sm">
+                        CHƯƠNG I
+                    </span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                        Chuyến Xe Đêm Lên Phố & Đôi Bàn Tay Người Công Nhân Lành Nghề
+                    </h3>
+                </div>
+
+                <p class="drop-cap">
+                    Ai trong đời cũng có một điểm xuất phát, và điểm xuất phát của tôi bắt đầu từ một chiếc ba lô bạc màu trên chuyến xe khách tiến về thành phố Hồ Chí Minh. Khi ấy, tôi chỉ là một chàng trai trẻ một mình rời quê hương, mang theo hành trang duy nhất là sức vóc của tuổi trẻ, đôi bàn tay chai sần không ngại việc khó và một khát vọng đổi đời âm ỉ cháy trong lồng ngực. Giữa Sài Gòn rộng lớn, hoa lệ và hối hả, tôi bắt đầu cuộc mưu sinh bằng công việc của một người công nhân kỹ thuật.
+                </p>
+
+                <p>
+                    Những năm tháng làm công nhân đã rèn giũa cho tôi một thái độ sống mà đến tận bây giờ tôi vẫn luôn biết ơn: <strong>sự tỉ mỉ, kỷ luật và lòng tự trọng nghề nghiệp</strong>. Trong tiếng máy chạy rền vang, giữa mùi dầu mỡ, bụi công trường và những ca làm việc kéo dài 10 đến 12 tiếng mỗi ngày, tôi không cho phép mình làm việc qua loa. Từng mối hàn, từng đường ống, từng chi tiết máy đều được tôi chăm chút bằng tất cả sự tận tâm. Nhờ vậy, từ một người thợ phụ, tôi nhanh chóng trở thành một người công nhân lành nghề, được anh em tin tưởng, cấp trên quý mến.
+                </p>
+
+                <p>
+                    Thế nhưng, mỗi khi đêm về, đứng trên tầng cao của những công trình đang xây dở, phóng tầm mắt nhìn Sài Gòn rực rỡ ánh đèn, một câu hỏi lớn cứ thôi thúc mãi trong tâm trí tôi: <em>"Mình đã làm tốt bằng đôi tay rồi, nhưng nếu có thêm tri thức khoa học bài bản, mình sẽ còn tiến xa đến đâu và đóng góp được nhiều hơn thế nào?"</em>
+                </p>
+            </section>
+
+            <!-- CHƯƠNG 2 -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold text-sm">
+                        CHƯƠNG II
+                    </span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                        Tuổi 24 Và Kỳ Tích Dưới Ánh Đèn Vàng Phòng Trọ
+                    </h3>
+                </div>
+
+                <p>
+                    Ở tuổi 24 — cái tuổi mà bạn bè đồng trang lứa đã tốt nghiệp đại học và yên bề công việc hoặc gia đình — tôi lại đưa ra một quyết định khiến nhiều người ngỡ ngàng: <strong>Ôn thi Đại học</strong>. Nhiều người khuyên tôi rằng đã có tay nghề vững, thu nhập ổn định rồi thì cần gì phải khổ cực quay lại từ đầu. Nhưng tôi hiểu rõ, trở ngại lớn nhất của đời người không phải là tuổi tác hay xuất phát điểm chậm, mà là sự bằng lòng với giới hạn của chính mình.
+                </p>
+
+                <!-- Trích dẫn nổi bật -->
+                <blockquote class="my-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/40 border-l-4 border-emerald-600 shadow-sm">
+                    <p class="font-serif italic text-xl sm:text-2xl text-slate-800 dark:text-slate-100 leading-relaxed">
+                        "Ban ngày đổ mồ hôi bên máy móc để nuôi sống ước mơ, ban đêm chong đèn bên trang sách cũ để mở lối tương lai. Ở tuổi 24, tôi không thi đại học bằng sự vô tư của tuổi 18, tôi thi bằng sinh mệnh và nghị lực của một người đàn ông tự lập."
+                    </p>
+                </blockquote>
+
+                <p>
+                    Đó là chuỗi ngày khắc nghiệt nhưng cũng rực rỡ nhất của tuổi thanh xuân. Sau một ngày làm việc cật lực rã rời chân tay, tôi vội vàng ăn bữa cơm chiều đạm bạc rồi ngồi vào bàn học trong căn phòng trọ nhỏ nóng hầm hập. Kiến thức phổ thông đã rơi rụng sau nhiều năm đi làm, những công thức Toán, Lý, Hóa ban đầu trông như những bức tường dựng đứng. Có những đêm cơn buồn ngủ và sự mệt mỏi ập đến làm nhòe đi trang vở, tôi phải vốc nước lạnh lên mặt, tự nhủ với lòng: <em>"Chỉ cần cố thêm một bài toán nữa thôi, ngày mai mình sẽ gần giảng đường hơn một bước!"</em>
+                </p>
+
+                <p>
+                    Và rồi, trời không phụ lòng người có chí. Ngày cầm tờ giấy báo trúng tuyển Đại học ở tuổi 24 trên đôi bàn tay vẫn còn vương vết chai của người thợ, tôi đã lặng người đi vì xúc động. Cánh cổng trường Đại học mở ra không chỉ trao cho tôi tấm vé tri thức, mà còn chứng minh một chân lý bất diệt: <strong>Không bao giờ là quá muộn để bắt đầu lại và vươn lên.</strong>
+                </p>
+            </section>
+
+            <!-- Hình ảnh minh họa giữa bài: a4.jpg (Sải bước lúc bình minh) -->
+            <figure class="my-10 rounded-3xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <div class="relative overflow-hidden group">
+                    <img 
+                        data-photo-key="a4"
+                        src="a4.jpg" 
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1200&q=80';"
+                        alt="Sải bước lúc bình minh dưới hàng đèn rực sáng tại giải chạy Cần Giờ" 
+                        class="w-full max-h-[480px] object-cover group-hover:scale-105 transition-transform duration-700"
+                    >
+                    <div class="absolute top-4 right-4 bg-slate-900/75 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full">
+                        Khởi đầu từ lúc phố còn lên đèn • BIB M 80137
+                    </div>
+                </div>
+                <figcaption class="p-5 text-sm text-slate-600 dark:text-slate-400 italic text-center">
+                    Giống như những bước chạy bắt đầu từ lúc tờ mờ sáng khi đèn đường còn thắp sáng (góc phải, BIB M 80137), hành trình cuộc đời tôi cũng đi từ những đêm dài miệt mài để đón lấy ánh bình minh rực rỡ.
+                </figcaption>
+            </figure>
+
+            <!-- CHƯƠNG 3 -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 font-bold text-sm">
+                        CHƯƠNG III
+                    </span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                        Kỹ Sư Cơ Điện Lạnh (HVAC) – Thổi "Nhịp Thở Mát Lành" Cho TP.HCM Giàu Đẹp & Nghĩa Tình
+                    </h3>
+                </div>
+
+                <p>
+                    Bước vào giảng đường đại học với nền tảng là một người công nhân thực chiến, tôi có một lợi thế đặc biệt: khi thầy cô giảng về nguyên lý nhiệt động lực học, truyền nhiệt hay hệ thống điều hòa không khí trung tâm (Chiller, VRV, AHU), tôi không chỉ nhìn thấy những con số khô khan trên bản vẽ, mà nhìn thấy cả hơi thở thực tế của thiết bị ngoài công trường. Sự kết hợp giữa <strong>bàn tay người thợ lành nghề</strong> và <strong>tư duy của người kỹ sư</strong> đã giúp tôi bứt phá mạnh mẽ.
+                </p>
+
+                <p>
+                    Trở thành một <strong>Kỹ sư giỏi trong ngành Cơ Điện Lạnh (HVAC / MEP)</strong>, tôi mang lòng biết ơn sâu sắc đối với TP. Hồ Chí Minh — mảnh đất đã cưu mang, bao dung và trao cơ hội cho chàng thanh niên nghèo năm ấy. Người ta thường ví kiến trúc là hình hài của một tòa nhà, kết cấu là khung xương, còn hệ thống Cơ Điện Lạnh chính là <strong>"lá phổi và mạch máu"</strong> mang lại sự sống, luồng khí tươi mát lành và sự vận hành bền bỉ cho mỗi công trình.
+                </p>
+
+                <p>
+                    Qua từng dự án lớn nhỏ, từ các tòa nhà văn phòng hiện đại, khu đô thị mới, nhà máy sản xuất cho đến những công trình phục vụ cộng đồng, tôi luôn đặt trọn tâm huyết vào từng bản thiết kế tối ưu năng lượng, từng giải pháp thi công chuẩn xác. Mỗi khi nhìn một công trình sáng đèn, vận hành êm ái và mang lại không gian làm việc, sinh sống an lành cho hàng ngàn con người, lòng tôi lại trào dâng niềm tự hào vì mình đã góp một phần nhỏ bé xây dựng nên một <strong>TP. Hồ Chí Minh văn minh, giàu đẹp và nghĩa tình</strong>.
+                </p>
+            </section>
+
+            <!-- Hình ảnh minh họa giữa bài: a3.jpg (Nụ cười vẫy tay trên đường chạy) -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center my-10 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl shadow-lg border border-slate-200/80 dark:border-slate-800">
+                <div class="md:col-span-6 rounded-2xl overflow-hidden">
+                    <img 
+                        data-photo-key="a3"
+                        src="a3.jpg" 
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1530143311094-34d807799e8f?auto=format&fit=crop&w=1000&q=80';"
+                        alt="Nụ cười rạng rỡ và cái vẫy tay thân thiện của người kỹ sư trên đường chạy Marathon" 
+                        class="w-full h-80 sm:h-96 object-cover object-top hover:scale-105 transition-transform duration-500"
+                    >
+                </div>
+                <div class="md:col-span-6 space-y-4">
+                    <span class="inline-block px-3 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold uppercase">
+                        Phong thái trên đường đời & đường đua
+                    </span>
+                    <h4 class="font-serif text-2xl font-bold text-slate-900 dark:text-white">
+                        Vững Vàng Trong Công Việc, Rạng Rỡ Trên Mọi Cung Đường
+                    </h4>
+                    <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Cuộc đời của một người làm kỹ thuật và hành trình chinh phục một cự ly Marathon giống nhau đến kỳ lạ. Đều cần sự chuẩn bị kỹ lưỡng, phân phối sức bền thông minh, vượt qua những "bức tường" mệt mỏi và quan trọng nhất là giữ được <strong>nụ cười lạc quan, cái vẫy tay ấm áp</strong> với mọi người xung quanh.
+                    </p>
+                    <div class="pt-2 flex items-center gap-3 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Sức khỏe dẻo dai • Tinh thần minh mẫn • Trái tim nhân hậu</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHƯƠNG 4 -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-bold text-sm">
+                        CHƯƠNG IV
+                    </span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                        Hành Trình Hạnh Phúc: Khi Đích Đến Là Tình Bằng Hữu Và Sự Sẻ Chia
+                    </h3>
+                </div>
+
+                <p>
+                    Khi sự nghiệp đã vững vàng, tôi nhận ra thành công trọn vẹn nhất không chỉ đo bằng chức danh hay những công trình bê tông cốt thép, mà đo bằng <strong>sức khỏe, sự bình an trong tâm hồn và những mối quan hệ chân thành</strong>. Tôi tìm đến chạy bộ đường dài (Marathon) như một cách rèn luyện thân - tâm - trí.
+                </p>
+
+                <p>
+                    Những buổi sáng cuối tuần cùng anh chị em đồng đội sải bước dưới hàng dừa xanh mát ở Cần Giờ hay những cung đường rợp bóng cây, cùng nhau đeo trên ngực tấm huy chương hoàn thành (Finisher), cùng cười vang dưới nắng sớm — đó chính là định nghĩa chân thực nhất của <strong>"Hành Trình Hạnh Phúc"</strong>. Đi một mình có thể giúp ta đi nhanh lúc khởi đầu, nhưng đi cùng những người bạn tri kỷ, những người đồng nghiệp và gia đình yêu thương sẽ giúp ta đi thật xa và thật trọn vẹn trên đường đời.
+                </p>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- TIMELINE: CỘT MỐC VÀNG TRONG ĐỜI -->
+    <section id="cot-moc" class="py-16 lg:py-24 bg-slate-100 dark:bg-slate-900/60 border-y border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-widest">Dấu Ấn Không Phai</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mt-2">
+                    4 Chặng Đường Kiến Tạo Nên Phiên Bản Hôm Nay
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Mốc 1 -->
+                <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 relative group hover:-translate-y-1.5 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Chặng 01 • Khởi Đầu</span>
+                    <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">Người Công Nhân Lành Nghề</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Một mình lên thành phố lập nghiệp, làm việc cật lực trong xưởng máy và công trường, trui rèn kỷ luật thép và đôi bàn tay vàng.
+                    </p>
+                </div>
+
+                <!-- Mốc 2 -->
+                <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 relative group hover:-translate-y-1.5 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Chặng 02 • Bước Ngoặt Tuổi 24</span>
+                    <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">Đỗ Đại Học Bằng Nghị Lực</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Vừa làm vừa tự ôn luyện thâu đêm suốt sáng, chinh phục cánh cổng trường Đại học ở tuổi 24 trước sự khâm phục của mọi người.
+                    </p>
+                </div>
+
+                <!-- Mốc 3 -->
+                <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 relative group hover:-translate-y-1.5 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-fan"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Chặng 03 • Sự Nghiệp</span>
+                    <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">Kỹ Sư Cơ Điện Lạnh Giỏi</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Làm chủ công nghệ HVAC/MEP hiện đại, kiến tạo những công trình chất lượng cao, góp sức xây dựng TP.HCM giàu đẹp và nghĩa tình.
+                    </p>
+                </div>
+
+                <!-- Mốc 4 -->
+                <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 relative group hover:-translate-y-1.5 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Chặng 04 • Viên Mãn</span>
+                    <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">Hành Trình Hạnh Phúc</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Lan tỏa năng lượng tích cực qua từng bước chạy Marathon, gắn kết tình bằng hữu và truyền lửa vươn lên cho thế hệ trẻ.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BỘ SƯU TẬP ẢNH: TRANG ĐẠI DIỆN "HÀNH TRÌNH HẠNH PHÚC" (Tất cả 5 bức ảnh đính kèm) -->
+    <section id="goc-anh" class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <div class="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-widest">
+                    <i class="fa-solid fa-camera-retro"></i>
+                    <span>Triển lãm ký ức thực tế</span>
+                </div>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mt-2">
+                    Bộ Ảnh Đại Diện: "Hành Trình Hạnh Phúc"
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
+                    Mỗi bức ảnh là một lát cắt chân thực của niềm vui, của mồ hôi lấp lánh dưới nắng Cần Giờ và tình cảm ấm áp bên những người bạn đồng hành. Nhấn vào từng ảnh để xem kích thước lớn.
+                </p>
+            </div>
+            <button onclick="openPhotoSwapModal()" class="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 hover:bg-emerald-600 hover:text-white text-slate-700 dark:text-slate-200 text-sm font-medium transition-colors">
+                <i class="fa-solid fa-folder-open"></i>
+                <span>Chọn tệp ảnh từ máy tính</span>
+            </button>
+        </div>
+
+        <!-- Lưới Bố Cục Nghệ Thuật 5 Bức Ảnh -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            
+            <!-- Ảnh 1: a1.jpg - Đại gia đình & Những người bạn dưới rặng dừa xanh (Rộng 7 cột) -->
+            <div onclick="openLightbox('a1')" class="md:col-span-7 group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-900 h-[360px] sm:h-[420px]">
+                <img 
+                    data-photo-key="a1"
+                    src="a1.jpg" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80';"
+                    alt="Khoảnh khắc sum vầy khoe huy chương dưới hàng dừa xanh mát cùng những người bạn và thế hệ trẻ" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6 text-white">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-slate-950 mb-2 inline-block">
+                        Tình Bằng Hữu & Thế Hệ Kế Thừa
+                    </span>
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold">Niềm Vui Chung Dưới Rặng Dừa Xanh</h3>
+                    <p class="text-xs sm:text-sm text-slate-200 mt-1 line-clamp-2">
+                        Nút "Like" thật tươi bên trái hàng đầu cùng những chiếc huy chương lấp lánh của cả đoàn — từ những người bạn đồng niên đến các em nhỏ. Hạnh phúc là khi cùng nhau khỏe mạnh.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ảnh 2: a5.jpg - YOU ARE A GREAT FINISHER (Rộng 5 cột) -->
+            <div onclick="openLightbox('a5')" class="md:col-span-5 group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-900 h-[360px] sm:h-[420px]">
+                <img 
+                    data-photo-key="a5"
+                    src="a5.jpg" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513593771513-7b58b6c4af38?auto=format&fit=crop&w=1000&q=80';"
+                    alt="You Are A Great Finisher - VnExpress Marathon Green Paradise Cần Giờ" 
+                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6 text-white">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white mb-2 inline-block">
+                        YOU ARE A GREAT FINISHER
+                    </span>
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold">Thả Tim Chiến Thắng Sau Vạch Đích</h3>
+                    <p class="text-xs sm:text-sm text-slate-200 mt-1 line-clamp-2">
+                        Trong cuộc đời cũng như trên đường chạy, người chiến thắng vĩ đại nhất là người hoàn thành trọn vẹn hành trình của mình với trái tim yêu thương.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ảnh 3: a3.jpg - Vẫy chào trên đường chạy (Rộng 4 cột) -->
+            <div onclick="openLightbox('a3')" class="md:col-span-4 group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-900 h-[340px]">
+                <img 
+                    data-photo-key="a3"
+                    src="a3.jpg" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1530143311094-34d807799e8f?auto=format&fit=crop&w=1000&q=80';"
+                    alt="Nụ cười và cái vẫy tay tràn đầy năng lượng với số BIB M 80137" 
+                    class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5 text-white">
+                    <span class="text-xs font-bold text-emerald-400 uppercase">Năng Lượng Tích Cực</span>
+                    <h3 class="font-serif text-lg font-bold">Lời Chào Từ BIB M 80137</h3>
+                    <p class="text-xs text-slate-300 mt-1">Những bước chạy vững chãi và nụ cười luôn nở trên môi giữa thiên nhiên Cần Giờ.</p>
+                </div>
+            </div>
+
+            <!-- Ảnh 4: a4.jpg - Bình minh trên đại lộ ánh sáng (Rộng 4 cột) -->
+            <div onclick="openLightbox('a4')" class="md:col-span-4 group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-900 h-[340px]">
+                <img 
+                    data-photo-key="a4"
+                    src="a4.jpg" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1000&q=80';"
+                    alt="Hàng trăm bước chân cùng tiến về phía trước dưới ánh đèn rực sáng" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5 text-white">
+                    <span class="text-xs font-bold text-sky-400 uppercase">Khởi Hành Lúc Rạng Đông</span>
+                    <h3 class="font-serif text-lg font-bold">Hòa Nhịp Cùng Cộng Đồng</h3>
+                    <p class="text-xs text-slate-300 mt-1">Khi phố thị còn mờ sương, những người giàu ý chí đã bắt đầu sải bước trên đại lộ.</p>
+                </div>
+            </div>
+
+            <!-- Ảnh 5: a22.JPG - Dang rộng vòng tay về đích (Rộng 4 cột) -->
+            <div onclick="openLightbox('a22')" class="md:col-span-4 group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-900 h-[340px]">
+                <img 
+                    data-photo-key="a22"
+                    src="a22.JPG" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1000&q=80';"
+                    alt="Dang rộng đôi tay chạm vạch đích đầy tự hào" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5 text-white">
+                    <span class="text-xs font-bold text-amber-400 uppercase">Khoảnh Khắc Vinh Quang</span>
+                    <h3 class="font-serif text-lg font-bold">Dang Rộng Vòng Tay Đón Thành Công</h3>
+                    <p class="text-xs text-slate-300 mt-1">Biểu tượng của sự tự do, bản lĩnh vượt ngưỡng và niềm hạnh phúc vỡ òa.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PHẦN TRIẾT LÝ SỐNG & GÓC CHUYÊN GIA CƠ ĐIỆN LẠNH -->
+    <section id="triet-ly" class="py-16 lg:py-24 bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-widest">
+                        Đúc Kết Từ 30 Năm Trải Nghiệm
+                    </span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                        3 Nguyên Lý Của Ngành Cơ Điện Lạnh Áp Dụng Vào Hành Trình Đời Người
+                    </h2>
+                    <p class="text-slate-300 leading-relaxed">
+                        Là một kỹ sư gắn bó cả cuộc đời với hệ thống nhiệt - lạnh và dòng chảy năng lượng, tôi nghiệm ra rằng cuộc sống con người cũng vận hành theo những định luật vô cùng kỳ diệu.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <!-- Nguyên lý 1 -->
+                    <div class="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 hover:border-emerald-400/50 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold mb-2">Áp Suất Tạo Nên Sức Đẩy</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Trong hệ thống lạnh, máy nén tạo ra áp suất để môi chất tuần hoàn. Trong cuộc đời, chính áp lực của cái nghèo và gian khó tuổi đôi mươi đã nén lại thành động lực đẩy tôi vào giảng đường đại học ở tuổi 24.
+                        </p>
+                    </div>
+
+                    <!-- Nguyên lý 2 -->
+                    <div class="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 hover:border-amber-400/50 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold mb-2">Giữ Cái Đầu Lạnh & Trái Tim Ấm</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Hệ thống HVAC tốt giúp cân bằng nhiệt độ giữa ngày hè oi ả. Người kỹ sư trưởng thành cũng luôn giữ sự điềm tĩnh, chính xác trước thử thách nhưng lại ấm áp, nghĩa tình với đồng nghiệp và mảnh đất Sài Gòn.
+                        </p>
+                    </div>
+
+                    <!-- Nguyên lý 3 -->
+                    <div class="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 hover:border-sky-400/50 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 text-sky-300 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-arrows-spin"></i>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold mb-2">Vận Hành Bền Bỉ & Tiết Kiệm Sức</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Một hệ thống xuất sắc không phải hệ thống chạy quá tải rồi hỏng, mà là hệ thống bền bỉ qua hàng chục năm. Tập luyện Marathon chính là cách tôi bảo dưỡng "cỗ máy cơ thể" luôn tràn đầy sinh lực.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GÓC TƯƠNG TÁC: LƯU BÚT TRUYỀN CẢM HỨNG DÀNH CHO BẠN ĐỌC -->
+    <section id="luu-but" class="py-16 lg:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 lg:p-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <!-- Cột Form gửi lời nhắn -->
+                <div class="lg:col-span-5 space-y-5">
+                    <span class="text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-widest">Kết Nối Tâm Hồn</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                        Gửi Lời Chúc & Chia Sẻ Hành Trình Của Bạn
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Nếu bạn đang là một người công nhân đang ấp ủ giấc mơ đèn sách, một kỹ sư trẻ mới vào nghề, hay một người yêu chạy bộ, hãy để lại đôi dòng lưu bút nhé!
+                    </p>
+
+                    <form id="guestbookForm" onsubmit="addGuestbookEntry(event)" class="space-y-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1.5">Tên của bạn</label>
+                            <input id="guestName" type="text" required placeholder="VD: Minh Tuấn - Kỹ sư trẻ TP.HCM" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1.5">Vai trò / Lĩnh vực</label>
+                            <select id="guestRole" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="Đồng nghiệp ngành Cơ Điện Lạnh">Đồng nghiệp ngành Cơ Điện Lạnh (HVAC/MEP)</option>
+                                <option value="Bạn đồng hành Marathon">Bạn đồng hành Marathon / Runner</option>
+                                <option value="Sinh viên / Người trẻ vượt khó">Sinh viên / Người trẻ đang vượt khó</option>
+                                <option value="Bạn hữu & Người thân">Bạn hữu & Người thân</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1.5">Lời nhắn gửi</label>
+                            <textarea id="guestMessage" rows="3" required placeholder="Câu chuyện của anh tiếp thêm cho em rất nhiều động lực..." class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-lg shadow-emerald-600/25 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Gửi Lưu Bút Truyền Cảm Hứng</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cột Danh sách Lưu bút -->
+                <div class="lg:col-span-7 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-5">
+                            <h4 class="font-serif font-bold text-lg text-slate-900 dark:text-white">
+                                Lời Nhắn Từ Bạn Hữu & Thế Hệ Trẻ
+                            </h4>
+                            <span id="commentCount" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                                3 lưu bút
+                            </span>
+                        </div>
+
+                        <div id="guestbookList" class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
+                            <!-- Các lưu bút mẫu giàu cảm xúc -->
+                            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-sm text-slate-900 dark:text-white">Kỹ sư Hoàng Nam</span>
+                                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-medium">Đồng nghiệp ngành Cơ Điện Lạnh</span>
+                                </div>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    "Làm việc cùng anh ở các dự án MEP tại TP.HCM, em luôn nể phục sự sâu sát từ thực tế thi công đến lý thuyết tính tải lạnh của anh. Đọc câu chuyện thi đỗ đại học năm 24 tuổi càng làm tụi em kính trọng nghị lực của anh hơn!"
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-sm text-slate-900 dark:text-white">Anh Chị Em Nhóm Chạy Bộ</span>
+                                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-medium">Bạn đồng hành Marathon</span>
+                                </div>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    "Bức ảnh dang rộng hai tay về đích ở Cần Giờ (BIB M 80137) và tấm hình cả nhóm khoe huy chương dưới hàng dừa đẹp quá anh ơi! Chúc anh luôn giữ mãi đôi chân dẻo dai và nụ cười rạng rỡ như thế trên mọi cung đường."
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-sm text-slate-900 dark:text-white">Lê Quốc Bảo (22 tuổi)</span>
+                                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-medium">Sinh viên / Người trẻ vượt khó</span>
+                                </div>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    "Em cũng đang đi làm công nhân kỹ thuật và từng nghĩ mình đã quá tuổi để ôn thi đại học. Đọc được hành trình tuổi 24 của chú/anh thực sự như ngọn đuốc soi đường cho em. Cảm ơn anh vì câu chuyện quá đỗi tuyệt vời!"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div>
+                    <p class="text-white font-serif font-bold text-base">Blog Cá Nhân: Hành Trình Hạnh Phúc</p>
+                    <p class="text-xs text-slate-400">Từ Công Nhân Lành Nghề • Kỹ Sư Cơ Điện Lạnh • Đến Finisher Marathon TP.HCM</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 text-center sm:text-right">
+                © 2026 Hành Trình Hạnh Phúc • Tự hào góp phần xây dựng TP. Hồ Chí Minh giàu đẹp và nghĩa tình.
+            </p>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX MODAL XEM ẢNH PHÓNG TO -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl flex items-center justify-center transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-5xl w-full flex flex-col items-center">
+            <img id="lightboxImg" src="" alt="Phóng to ảnh Hành trình hạnh phúc" class="max-h-[78vh] w-auto rounded-2xl shadow-2xl border border-white/15 object-contain">
+            <div class="mt-4 text-center max-w-2xl">
+                <h4 id="lightboxTitle" class="text-white font-serif text-xl font-bold"></h4>
+                <p id="lightboxDesc" class="text-slate-300 text-sm mt-1"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐỒNG BỘ ẢNH GỐC TỪ MÁY TÍNH (Giúp hiển thị 100% ảnh thật ngay cả khi mở file HTML ở bất kỳ thư mục nào) -->
+    <div id="photoSwapModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-images text-emerald-600"></i>
+                    <span>Đồng Bộ 5 Bức Ảnh Của Bạn</span>
+                </h3>
+                <button onclick="closePhotoSwapModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                Mặc định trang web đã liên kết sẵn với các tên file <code>a1.jpg</code>, <code>a3.jpg</code>, <code>a4.jpg</code>, <code>a5.jpg</code> và <code>a22.JPG</code>. Nếu bạn đang xem trực tiếp trên trình duyệt hoặc để file ở thư mục khác, bạn có thể chọn nhanh 5 bức ảnh từ máy để hiển thị tức thì:
+            </p>
+
+            <div class="space-y-3 text-xs sm:text-sm">
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    <span class="font-medium">1. Ảnh về đích dang rộng tay (a22.JPG)</span>
+                    <input type="file" accept="image/*" onchange="updateSinglePhoto('a22', this)" class="text-xs w-44">
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    <span class="font-medium">2. Ảnh tập thể dưới hàng dừa (a1.jpg)</span>
+                    <input type="file" accept="image/*" onchange="updateSinglePhoto('a1', this)" class="text-xs w-44">
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    <span class="font-medium">3. Ảnh vẫy tay BIB M 80137 (a3.jpg)</span>
+                    <input type="file" accept="image/*" onchange="updateSinglePhoto('a3', this)" class="text-xs w-44">
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    <span class="font-medium">4. Ảnh chạy lúc bình minh (a4.jpg)</span>
+                    <input type="file" accept="image/*" onchange="updateSinglePhoto('a4', this)" class="text-xs w-44">
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    <span class="font-medium">5. Ảnh bảng GREAT FINISHER (a5.jpg)</span>
+                    <input type="file" accept="image/*" onchange="updateSinglePhoto('a5', this)" class="text-xs w-44">
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closePhotoSwapModal()" class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors">
+                    Hoàn tất & Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Metadata cho từng bức ảnh để hiển thị trong Lightbox
+        const photoCaptions = {
+            a22: {
+                title: "Khoảnh Khắc Dang Rộng Vòng Tay Chạm Đích (BIB M 80137)",
+                desc: "Biểu tượng cho hành trình vượt mọi chông gai từ người công nhân lành nghề, đỗ đại học tuổi 24 đến người kỹ sư Cơ Điện Lạnh bản lĩnh."
+            },
+            a1: {
+                title: "Niềm Vui Sum Vầy Dưới Hàng Dừa Xanh Mát",
+                desc: "Cùng những người bạn đồng hành và thế hệ trẻ tự hào nâng tấm huy chương chiến thắng dưới nắng ấm."
+            },
+            a3: {
+                title: "Nụ Cười Thân Thiện & Cái Vẫy Tay Trên Đường Chạy Cần Giờ",
+                desc: "Số BIB M 80137 với bước chạy dẻo dai, lạc quan và tràn đầy năng lượng sống tích cực."
+            },
+            a4: {
+                title: "Sải Bước Từ Lúc Rạng Đông Khi Đèn Đường Còn Sáng",
+                desc: "Hòa mình vào dòng người chạy bộ tại VnExpress Marathon Green Paradise Cần Giờ — bền bỉ tiến về phía trước."
+            },
+            a5: {
+                title: "YOU ARE A GREAT FINISHER - Vinh Quang Sau Vạch Đích",
+                desc: "Kỷ niệm đáng nhớ bên những người bạn quý mến tại bảng vinh danh Finisher."
+            }
+        };
+
+        // Thanh tiến trình đọc bài
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Chuyển đổi giao diện Sáng / Tối
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            htmlEl.classList.toggle('dark');
+            if (htmlEl.classList.contains('dark')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+
+        // Mở Lightbox xem ảnh lớn
+        function openLightbox(key) {
+            const imgElement = document.querySelector(`img[data-photo-key="${key}"]`);
+            if (!imgElement) return;
+            const modal = document.getElementById('lightboxModal');
+            document.getElementById('lightboxImg').src = imgElement.src;
+            document.getElementById('lightboxTitle').textContent = photoCaptions[key]?.title || '';
+            document.getElementById('lightboxDesc').textContent = photoCaptions[key]?.desc || '';
+            modal.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
+        }
+
+        // Mở / Đóng Modal đồng bộ ảnh từ máy
+        function openPhotoSwapModal() {
+            document.getElementById('photoSwapModal').classList.remove('hidden');
+        }
+
+        function closePhotoSwapModal() {
+            document.getElementById('photoSwapModal').classList.add('hidden');
+        }
+
+        // Cập nhật ảnh ngay lập tức khi người dùng chọn từ máy tính
+        function updateSinglePhoto(key, input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const targets = document.querySelectorAll(`img[data-photo-key="${key}"]`);
+                    targets.forEach(img => {
+                        img.src = e.target.result;
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Thêm lưu bút mới từ bạn đọc
+        function addGuestbookEntry(event) {
+            event.preventDefault();
+            const name = document.getElementById('guestName').value.trim();
+            const role = document.getElementById('guestRole').value;
+            const message = document.getElementById('guestMessage').value.trim();
+            if (!name || !message) return;
+
+            const list = document.getElementById('guestbookList');
+            const entry = document.createElement('div');
+            entry.className = 'p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 transition-all';
+            entry.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <span class="font-bold text-sm text-slate-900 dark:text-white">${escapeHtml(name)}</span>
+                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-medium">${escapeHtml(role)}</span>
+                </div>
+                <p class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">"${escapeHtml(message)}"</p>
+            `;
+            list.prepend(entry);
+
+            // Cập nhật số lượng lưu bút
+            const countEl = document.getElementById('commentCount');
+            const currentCount = list.children.length;
+            countEl.textContent = `${currentCount} lưu bút`;
+
+            document.getElementById('guestbookForm').reset();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                })[m];
+            });
+        }
+    </script>
+</body>
+</html>
